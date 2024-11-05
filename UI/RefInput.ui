@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RefInput</class>
+ <widget class="QWidget" name="RefInput">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>696</width>
+    <height>138</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="__lo_main">
+   <property name="leftMargin">
+    <number>2</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>2</number>
+   </property>
+   <property name="bottomMargin">
+    <number>2</number>
+   </property>
+   <property name="spacing">
+    <number>2</number>
+   </property>
+   <item row="0" column="0" rowspan="4">
+    <widget class="QLabel" name="lb_img">
+     <property name="minimumSize">
+      <size>
+       <width>160</width>
+       <height>120</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>160</width>
+       <height>120</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>img</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="combo_style">
+     <item>
+      <property name="text">
+       <string>Style</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Character</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="0" column="2" colspan="2">
+    <widget class="QLineEdit" name="le_url"/>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="__lb_w">
+     <property name="text">
+      <string>Weight</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QSlider" name="hsl_w">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QSpinBox" name="spin_w">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3">
+    <widget class="QPushButton" name="bt_save">
+     <property name="text">
+      <string>Save</string>
+     </property>
+     <property name="shortcut">
+      <string notr="true"/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QPushButton" name="bt_delete">
+     <property name="text">
+      <string>delete</string>
+     </property>
+     <property name="shortcut">
+      <string notr="true"/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>hsl_w</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spin_w</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>575</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spin_w</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>hsl_w</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>575</x>
+     <y>51</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>259</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>bt_delete</sender>
+   <signal>clicked()</signal>
+   <receiver>RefInput</receiver>
+   <slot>deleteLater()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>723</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>745</x>
+     <y>37</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
