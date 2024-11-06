@@ -3,6 +3,8 @@ from PySide6.QtGui import QKeySequence, QAction, QShortcut, QTextCursor
 from PySide6.QtCore import Qt
 from functools import partial
 
+from OllamaAction import OllamaAction
+
 
 class RemainSelection:
     def __init__(self, cursor: QTextCursor):
@@ -25,8 +27,13 @@ class PromptEditor(QTextEdit):
         permuteAction.triggered.connect(self.PermuteSelection)
         permuteAction.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         menu.addAction(permuteAction)
-
         self.addAction(permuteAction)
+
+        ollamaAction = OllamaAction(self, "llama3.1")
+        ollamaAction.setShortcut(QKeySequence("Ctrl+O"))
+        ollamaAction.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
+        menu.addAction(ollamaAction)
+        self.addAction(ollamaAction)
 
         pwMenu = QMenu("Set Selection +W")
         nwMenu = QMenu("Set Selection -W")
