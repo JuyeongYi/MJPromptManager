@@ -1,24 +1,21 @@
-from PySide6.QtWidgets import QTextEdit, QMenu
+import csv
+from pathlib import Path
+
+from PySide6.QtWidgets import QTextEdit, QMenu, QDialog
 from PySide6.QtGui import QKeySequence, QAction, QShortcut, QTextCursor
 from PySide6.QtCore import Qt
 from functools import partial
 
-from OllamaAction import OllamaAction
-
-
-class RemainSelection:
-    def __init__(self, cursor: QTextCursor):
-        self.cursor = cursor
-        self.start = cursor.position()
-        self.end = self.start
-
-    def __enter__(self):
-        pass
+from MJPromptMaker.OllamaAction import OllamaAction
+from MJPromptMaker.KeywordWidget import KeywordManagerDialog
 
 
 class PromptEditor(QTextEdit):
     def __init__(self, parent):
         super().__init__(parent)
+
+        self.keywordsDialog = KeywordManagerDialog(Path("keywords.csv"), self)
+
         menu = self.createStandardContextMenu()
         menu.addSeparator()
 
@@ -34,6 +31,13 @@ class PromptEditor(QTextEdit):
         ollamaAction.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
         menu.addAction(ollamaAction)
         self.addAction(ollamaAction)
+
+        keywordAction = QAction("Open Keyword Manager", self)
+        keywordAction.setShortcut(QKeySequence("Ctrl+K"))
+        keywordAction.triggered.connect(self.PutKeywords)
+        keywordAction.setShortcutContext(Qt.ShortcutContext.WidgetShortcut)
+        menu.addAction(keywordAction)
+        self.addAction(keywordAction)
 
         pwMenu = QMenu("Set Selection +W")
         nwMenu = QMenu("Set Selection -W")
@@ -59,6 +63,12 @@ class PromptEditor(QTextEdit):
 
     def contextMenuEvent(self, e):
         self.menu.exec_(e.globalPos())
+
+    def PutKeywords(self):
+        if self.keywordsDialog.exec() == QDialog.DialogCode.Accepted:
+            selected = self.keywordsDialog.GetJoinedSelectedKeywords()
+            cursor = self.textCursor()
+            cursor.insertText(selected)
 
     def PermuteSelection(self):
         cursor = self.textCursor()

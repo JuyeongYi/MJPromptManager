@@ -15,43 +15,50 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QPushButton, QScrollArea,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QPushButton, QScrollArea,
+    QSizePolicy, QVBoxLayout, QWidget)
 
 class Ui_InputHandler(object):
     def setupUi(self, InputHandler):
         if not InputHandler.objectName():
             InputHandler.setObjectName(u"InputHandler")
-        InputHandler.resize(298, 293)
-        self.gridLayout = QGridLayout(InputHandler)
-        self.gridLayout.setSpacing(2)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setContentsMargins(2, 2, 2, 2)
+        InputHandler.resize(302, 140)
+        self.lo_main = QVBoxLayout(InputHandler)
+        self.lo_main.setObjectName(u"lo_main")
+        self.__lo_btns = QHBoxLayout()
+        self.__lo_btns.setObjectName(u"__lo_btns")
+        self.lo_weight = QHBoxLayout()
+        self.lo_weight.setObjectName(u"lo_weight")
+
+        self.__lo_btns.addLayout(self.lo_weight)
+
+        self.bt_addNew = QPushButton(InputHandler)
+        self.bt_addNew.setObjectName(u"bt_addNew")
+        self.bt_addNew.setMaximumSize(QSize(100, 16777215))
+
+        self.__lo_btns.addWidget(self.bt_addNew)
+
+        self.bt_browse = QPushButton(InputHandler)
+        self.bt_browse.setObjectName(u"bt_browse")
+        self.bt_browse.setMaximumSize(QSize(100, 16777215))
+#if QT_CONFIG(shortcut)
+        self.bt_browse.setShortcut(u"")
+#endif // QT_CONFIG(shortcut)
+
+        self.__lo_btns.addWidget(self.bt_browse)
+
         self.bt_clear = QPushButton(InputHandler)
         self.bt_clear.setObjectName(u"bt_clear")
+        self.bt_clear.setMaximumSize(QSize(100, 16777215))
 #if QT_CONFIG(shortcut)
         self.bt_clear.setShortcut(u"")
 #endif // QT_CONFIG(shortcut)
         self.bt_clear.setFlat(False)
 
-        self.gridLayout.addWidget(self.bt_clear, 0, 3, 1, 1)
+        self.__lo_btns.addWidget(self.bt_clear)
 
-        self.bt_addNew = QPushButton(InputHandler)
-        self.bt_addNew.setObjectName(u"bt_addNew")
 
-        self.gridLayout.addWidget(self.bt_addNew, 0, 1, 1, 1)
-
-        self.bt_browse = QPushButton(InputHandler)
-        self.bt_browse.setObjectName(u"bt_browse")
-#if QT_CONFIG(shortcut)
-        self.bt_browse.setShortcut(u"")
-#endif // QT_CONFIG(shortcut)
-
-        self.gridLayout.addWidget(self.bt_browse, 0, 2, 1, 1)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout.addItem(self.horizontalSpacer, 0, 0, 1, 1)
+        self.lo_main.addLayout(self.__lo_btns)
 
         self.scra = QScrollArea(InputHandler)
         self.scra.setObjectName(u"scra")
@@ -59,15 +66,18 @@ class Ui_InputHandler(object):
         self.scra.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignTop)
         self.scrw = QWidget()
         self.scrw.setObjectName(u"scrw")
-        self.scrw.setGeometry(QRect(0, 0, 292, 260))
+        self.scrw.setGeometry(QRect(0, 0, 282, 87))
         self.lo_scroll = QVBoxLayout(self.scrw)
         self.lo_scroll.setSpacing(2)
         self.lo_scroll.setObjectName(u"lo_scroll")
         self.lo_scroll.setContentsMargins(2, 2, 2, 2)
         self.scra.setWidget(self.scrw)
 
-        self.gridLayout.addWidget(self.scra, 1, 0, 1, 4)
+        self.lo_main.addWidget(self.scra)
 
+        QWidget.setTabOrder(self.bt_addNew, self.bt_browse)
+        QWidget.setTabOrder(self.bt_browse, self.bt_clear)
+        QWidget.setTabOrder(self.bt_clear, self.scra)
 
         self.retranslateUi(InputHandler)
 
@@ -76,8 +86,8 @@ class Ui_InputHandler(object):
 
     def retranslateUi(self, InputHandler):
         InputHandler.setWindowTitle(QCoreApplication.translate("InputHandler", u"Form", None))
-        self.bt_clear.setText(QCoreApplication.translate("InputHandler", u"Clear", None))
         self.bt_addNew.setText(QCoreApplication.translate("InputHandler", u"New", None))
         self.bt_browse.setText(QCoreApplication.translate("InputHandler", u"Browse", None))
+        self.bt_clear.setText(QCoreApplication.translate("InputHandler", u"Clear", None))
     # retranslateUi
 

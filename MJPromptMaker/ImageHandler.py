@@ -10,24 +10,21 @@ from urllib.parse import urlparse, unquote
 import requests
 
 
-@dataclass(frozen=True)
+@dataclass
 class ImageInfo:
     url: str
     filename: Path
     tags: List[str]
-    metadata: Optional[Dict[str, str]] = None
 
     @classmethod
     def FromJSON(cls, json_path: Path | str) -> 'ImageInfo':
         json_path = Path(json_path)
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-            md = data.get('metadata', None)
             return cls(
                 url=data['url'],
                 filename=Path(data['filename']),
-                tags=data['tags'],
-                metadata=md
+                tags=data['tags']
             )
 
     @property
@@ -37,8 +34,6 @@ class ImageInfo:
             'filename': str(self.filename),
             'tags': self.tags
         }
-        if self.metadata:
-            data.update(self.metadata)
         return data
 
     def Rename(self, new_name: str | Path) -> 'ImageInfo':
@@ -58,33 +53,38 @@ class ImageInfo:
         newImg = currImg.parent / newPath
         newJSON = newImg.with_suffix('.json')
 
-        if newImg.exists() or newJSON.exists():
-            raise FileExistsError(f"File already exists: {newImg}")
+        edit = newImg == currImg
+        if not edit:
+            for newFile in (newImg, newJSON):
+                if newFile.exists():
+                    newFile.unlink(missing_ok=True)
 
         newImgInfo = ImageInfo(
             url=self.url,
             filename=newImg,
-            tags=self.tags.copy(),
-            metadata=self.metadata.copy() if self.metadata else None
+            tags=self.tags if self.tags else list(),
         )
 
         try:
             currImg.rename(newImg)
             with open(newJSON, 'w', encoding='utf-8') as f:
-                json.dump(newImgInfo.JSON, f, ensure_ascii=False, indent=2)
-            currJSON.unlink()
+                toWrite = newImgInfo.JSON
+                json.dump(toWrite, f, ensure_ascii=False, indent=2)
+            if not edit:
+                currJSON.unlink()
             return newImgInfo
 
         except Exception as e:
-            try:
-                if newImg.exists():
-                    newImg.rename(currImg)
-                if newJSON.exists():
-                    newJSON.unlink()
-            except Exception as rollback_error:
-                raise RuntimeError(f"Failed to rollback after error: {str(rollback_error)}")
+            if not edit:
+                try:
+                    if newImg.exists():
+                        newImg.rename(currImg)
+                    if newJSON.exists():
+                        newJSON.unlink()
+                except Exception as rollback_error:
+                    raise RuntimeError(f"Failed to rollback after error: {str(rollback_error)}")
 
-            raise RuntimeError(f"Failed to rename files: {str(e)} File Rollback completed.")
+                raise RuntimeError(f"Failed to rename files: {str(e)} File Rollback completed.")
 
     @property
     def JSONPath(self) -> Path:
@@ -99,36 +99,32 @@ class ImageDownloader:
         Args:
             saveDir (Union[Path, str]): 이미지와 메타데이터를 저장할 디렉토리 경로
         """
-        self.saveDir = Path(saveDir)
-        self.saveDir.mkdir(parents=True, exist_ok=True)
+        self.__saveDir = Path(saveDir)
+        self.__saveDir.mkdir(parents=True, exist_ok=True)
+
+    @property
+    def SaveDir(self):
+        return self.__saveDir
 
     def IsURLImage(self, url: str) -> bool:
-        """
-        URL이 이미지를 가리키는지 확인
+        toks = url.rsplit('.', 1)
+        suff = toks[-1]
+        if '?' in suff:
+            suff = suff.split('?')[0]
 
-        Args:
-            url (str): 확인할 URL
-
-        Returns:
-            bool: 이미지 URL이면 True, 아니면 False
-        """
+        if suff not in ("png", "gif", "webp", "jpg", "jpeg"):
+            return False
         try:
             response = requests.head(url, allow_redirects=True)
             content_type = response.headers.get('content-type', '')
-            return content_type.startswith('image/')
+            if not content_type.startswith('image/'):
+                print(
+                    f"Warning: {url} content type is not an image, but {content_type}. Could be binary but not image.")
+            return True
         except requests.RequestException:
             return False
 
     def GetFileNameFromURL(self, url: str) -> Path:
-        """
-        URL에서 파일명 추출
-
-        Args:
-            url (str): 이미지 URL
-
-        Returns:
-            Path: 파일명을 포함한 Path 객체
-        """
         parsed_url = urlparse(url)
         filename = unquote(Path(parsed_url.path).name)
 
@@ -140,19 +136,7 @@ class ImageDownloader:
 
         return Path(filename)
 
-    def DownloadImage(self, url: str, tags: List[str] = None,
-                      moreMetadata: Dict = None) -> Optional[ImageInfo]:
-        """
-        이미지 다운로드 및 메타데이터 저장
-
-        Args:
-            url (str): 이미지 URL
-            tags (List[str], optional): 이미지 태그 리스트
-            moreMetadata (Dict, optional): 추가 메타데이터
-
-        Returns:
-            Optional[ImageInfo]: 성공 시 저장된 파일 메타데이터 json 경로, 실패 시 None
-        """
+    def DownloadImage(self, url: str, tags: List[str] = None) -> Optional[ImageInfo]:
         try:
             # URL 유효성 검사
             if not self.IsURLImage(url):
@@ -165,21 +149,20 @@ class ImageDownloader:
 
             # 파일 경로 생성
             filename = self.GetFileNameFromURL(url)
-            imagePath = self.saveDir / filename
+            if url.isnumeric():
+                filename = f"style_{url}"
+            imagePath = self.__saveDir / filename
 
             # 이미지 저장
             imagePath.write_bytes(response.content)
-
+            infoTags = tags if tags is not None else list()
             # 메타데이터 준비
             metadata = {
                 'url': url,
+                'name': filename.stem,
                 'filename': str(imagePath),
-                'tags': tags or [],
+                'tags': infoTags,
             }
-
-            # 추가 메타데이터 병합
-            if moreMetadata:
-                metadata["metadata"] = moreMetadata
 
             # 메타데이터 JSON 파일 저장
             jsonPath = imagePath.with_suffix('.json')
@@ -188,7 +171,7 @@ class ImageDownloader:
                 encoding='utf-8'
             )
 
-            return ImageInfo(url, imagePath, tags, metadata)
+            return ImageInfo(url, imagePath, infoTags)
 
         except Exception as e:
             print(f"Error downloading image from {url}: {str(e)}")
@@ -202,17 +185,7 @@ class ImageDownloader:
             List[Dict[str, Path]]: 이미지와 JSON 파일 경로 목록
         """
         toReturn = []
-        for js in self.saveDir.glob('*.json'):
+        for js in self.__saveDir.glob('*.json'):
             toReturn.append(ImageInfo.FromJSON(js))
 
         return toReturn
-
-
-if __name__ == '__main__':
-    downloader = ImageDownloader('images')
-    urls = ["https://www.dogdrip.net/dvs/d/24/11/06/565f284f923e045aa47be2323f681183.png"]
-    for url in urls:
-        downloader.DownloadImage(url, tags=['dog', 'cute'], moreMetadata={'source': 'dogdrip'})
-
-    for idx, info in enumerate(downloader.GetImageInfos()):
-        info.Rename(f"{idx}")

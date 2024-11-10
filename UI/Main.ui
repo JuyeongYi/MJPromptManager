@@ -6,70 +6,134 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>878</width>
-    <height>776</height>
+    <width>848</width>
+    <height>591</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string notr="true">MjPrmptBuilder</string>
   </property>
-  <layout class="QGridLayout" name="__lo_main">
+  <layout class="QGridLayout" name="gridLayout" rowstretch="4,1" columnstretch="3,2">
    <item row="0" column="0">
-    <widget class="QGroupBox" name="__group_pos">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>Text Prompt</string>
-     </property>
-     <layout class="QGridLayout" name="lo_pos"/>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QGroupBox" name="__group_pos">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Text Prompt</string>
+       </property>
+       <layout class="QGridLayout" name="lo_pos"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="__group_neg">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Neg Prompt(-no)</string>
+       </property>
+       <layout class="QGridLayout" name="lo_neg"/>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="group_option">
+       <property name="title">
+        <string>Options</string>
+       </property>
+       <layout class="QGridLayout" name="lo_option">
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>2</number>
+        </property>
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="lo_option1"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="__group_neg">
-     <property name="minimumSize">
-      <size>
-       <width>200</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="title">
-      <string>Neg Prompt(-no)</string>
-     </property>
-     <layout class="QGridLayout" name="lo_neg"/>
-    </widget>
+   <item row="0" column="1">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+     <item>
+      <widget class="QGroupBox" name="group_img">
+       <property name="title">
+        <string>Image</string>
+       </property>
+       <layout class="QVBoxLayout" name="lo_imgInput">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="group_sref">
+       <property name="title">
+        <string>Style Reference</string>
+       </property>
+       <layout class="QVBoxLayout" name="lo_srefInput">
+        <property name="spacing">
+         <number>2</number>
+        </property>
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="group_cref">
+       <property name="title">
+        <string>Character Reference</string>
+       </property>
+       <layout class="QVBoxLayout" name="lo_crefInput"/>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="group_option">
-     <property name="title">
-      <string>Options</string>
-     </property>
-     <layout class="QGridLayout" name="lo_option">
-      <property name="leftMargin">
-       <number>2</number>
-      </property>
-      <property name="topMargin">
-       <number>2</number>
-      </property>
-      <property name="rightMargin">
-       <number>2</number>
-      </property>
-      <property name="bottomMargin">
-       <number>2</number>
-      </property>
-      <property name="horizontalSpacing">
-       <number>2</number>
-      </property>
-      <item row="0" column="0">
-       <layout class="QVBoxLayout" name="lo_option1"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0" colspan="3">
+   <item row="1" column="0" colspan="2">
     <layout class="QGridLayout" name="__lo_btns">
      <item row="1" column="1" colspan="2">
       <widget class="QCheckBox" name="cb_changeSeed">
@@ -97,56 +161,14 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="1" rowspan="3">
-    <widget class="QGroupBox" name="group_img">
-     <property name="title">
-      <string>Image</string>
-     </property>
-     <layout class="QVBoxLayout" name="lo_imgInput">
-      <property name="spacing">
-       <number>2</number>
-      </property>
-      <property name="leftMargin">
-       <number>2</number>
-      </property>
-      <property name="topMargin">
-       <number>2</number>
-      </property>
-      <property name="rightMargin">
-       <number>2</number>
-      </property>
-      <property name="bottomMargin">
-       <number>2</number>
-      </property>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="2" rowspan="3">
-    <widget class="QGroupBox" name="group_ref">
-     <property name="title">
-      <string>Reference</string>
-     </property>
-     <layout class="QVBoxLayout" name="lo_refInput">
-      <property name="spacing">
-       <number>2</number>
-      </property>
-      <property name="leftMargin">
-       <number>2</number>
-      </property>
-      <property name="topMargin">
-       <number>2</number>
-      </property>
-      <property name="rightMargin">
-       <number>2</number>
-      </property>
-      <property name="bottomMargin">
-       <number>2</number>
-      </property>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>textEdit</tabstop>
+  <tabstop>bt_build</tabstop>
+  <tabstop>bt_save</tabstop>
+  <tabstop>cb_changeSeed</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

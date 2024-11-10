@@ -18,13 +18,13 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QSizePolicy,
     QWidget)
 
-from MJPromptMaker.InheritWidget import PromptEditor
+from MJPromptMaker.PromptEditorWidget import PromptEditor
 
 class Ui_TextPrmpt(object):
     def setupUi(self, TextPrmpt):
         if not TextPrmpt.objectName():
             TextPrmpt.setObjectName(u"TextPrmpt")
-        TextPrmpt.resize(314, 161)
+        TextPrmpt.resize(314, 291)
         self.gridLayout = QGridLayout(TextPrmpt)
         self.gridLayout.setSpacing(2)
         self.gridLayout.setObjectName(u"gridLayout")

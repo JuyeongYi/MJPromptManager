@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum, auto
 from abc import abstractmethod
 from math import gcd
@@ -57,13 +58,11 @@ Number = Union[int, float]
 
 class NumParm(MJParm):
     chaos = 0, 100, int, 0
-    iw = 0.0, 3.0, float, 1.0
     repeat = 2, 40, int, 2
     seed = 0, (2 ** 30), int, 0
     stop = 10, 100, int, 100
     stylize = 0, 1000, int, 100
     weird = 0, 3000, int, 0
-
     sv = 1, 4, int, 4
 
     def __init__(self, minValue: Number, maxValue: Number, valuetype: type, default: Number):
@@ -139,22 +138,19 @@ class StrParm(MJParm):
         return ""
 
 
-class Reference(MJParm):
-    def __init__(self, minValue: int, maxValue: int, defaultValue: int):
-        self.__min = minValue
-        self.__max = maxValue
-        self.__default = defaultValue
+@dataclass(frozen=True)
+class ImageInputTypeValue:
+    minValue: int | float
+    maxValue: int | float
+    defaultValue: int | float
+    t: type
+    prefix: str = ""
 
-    sref = 0, 1000, 100
-    cref = 0, 100, 100
+
+class ImageInputType(MJParm):
+    iw = ImageInputTypeValue(0.0, 3.0, 1.0, float)
+    sw = ImageInputTypeValue(0, 1000, 100, int, "--sref ")
+    cw = ImageInputTypeValue(0, 100, 100, int, "--cref ")
 
     def __call__(self, reference: str, weight: int):
         return f"--{self.name} {reference} --{self.name[0]}v {min(max(weight, self.__min), self.__max)}"
-
-
-if __name__ == '__main__':
-    s = Reference.sref("test", 100)
-    c = Reference.cref("testchar", 1000)
-    print(s)
-    print(c)
-    print(StrParm.aspect("1.5:1.2"))

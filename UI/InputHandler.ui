@@ -6,73 +6,70 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>298</width>
-    <height>293</height>
+    <width>302</width>
+    <height>140</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>2</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>2</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
-   </property>
-   <property name="spacing">
-    <number>2</number>
-   </property>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="bt_clear">
-     <property name="text">
-      <string>Clear</string>
-     </property>
-     <property name="shortcut">
-      <string notr="true"/>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-    </widget>
+  <layout class="QVBoxLayout" name="lo_main">
+   <item>
+    <layout class="QHBoxLayout" name="__lo_btns">
+     <item>
+      <layout class="QHBoxLayout" name="lo_weight"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bt_addNew">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>New</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bt_browse">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Browse</string>
+       </property>
+       <property name="shortcut">
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bt_clear">
+       <property name="maximumSize">
+        <size>
+         <width>100</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Clear</string>
+       </property>
+       <property name="shortcut">
+        <string notr="true"/>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="QPushButton" name="bt_addNew">
-     <property name="text">
-      <string>New</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2">
-    <widget class="QPushButton" name="bt_browse">
-     <property name="text">
-      <string>Browse</string>
-     </property>
-     <property name="shortcut">
-      <string notr="true"/>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="1" column="0" colspan="4">
+   <item>
     <widget class="QScrollArea" name="scra">
      <property name="widgetResizable">
       <bool>true</bool>
@@ -85,8 +82,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>292</width>
-        <height>260</height>
+        <width>282</width>
+        <height>87</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="lo_scroll">
@@ -111,6 +108,12 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>bt_addNew</tabstop>
+  <tabstop>bt_browse</tabstop>
+  <tabstop>bt_clear</tabstop>
+  <tabstop>scra</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
