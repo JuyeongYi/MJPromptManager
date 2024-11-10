@@ -82,6 +82,17 @@ Save 버튼을 누르면 이미지 파일과 json 파일이 저장됩니다.
 
 읽는 파일은 keywards.csv 이며, 예제로 작성된 파일을 참고하여 키워드를 작성하시면 됩니다.
 
+# Ollama 설정
+로컬 LLM을 사용하기 때문에 별도의 API 키 입력은 필요하지 않으나, Ollama 설치가 필요합니다.
+
+https://ollama.com/download 클릭 시 Ollama 프로그램을 다운로드 합니다.
+
+이후 pullama.bat을 실행하여 필요한 모델을 다운로드 해 주세요.
+
+다운로드 받는 모델은 llama3.1:8b이며, 향후 변동될 수 있습니다.
+
+Ollama 사용 기능은 Ollama가 켜져있지 않으면 동작하지 않습니다.
+
 # 사용 방법
 run-script.bat을 실행하면 됩니다.
 
