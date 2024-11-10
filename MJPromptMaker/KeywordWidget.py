@@ -1,5 +1,5 @@
 from os import PathLike, startfile
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Set
 from dataclasses import dataclass
 from enum import Enum, auto
 import csv
@@ -23,6 +23,9 @@ class Keyword:
     category: str
     priority: int = 0
 
+    def __hash__(self):
+        return hash(self.text)
+
 
 class KeywordManagerDialog(QDialog):
     KeywordAccepted = Signal(str)
@@ -32,7 +35,7 @@ class KeywordManagerDialog(QDialog):
 
         self.csvPath = csvPath
         self.categories = set()
-        self.keywordList: List[Keyword] = []
+        self.keywordList: Set[Keyword] = set()
 
         self.setWindowTitle("Keyword Manager")
         self.setMinimumSize(300, 400)
@@ -74,7 +77,6 @@ class KeywordManagerDialog(QDialog):
         lo_btns.addWidget(bt_accepted)
         lo_btns.addWidget(bt_rejected)
         lo_main.addLayout(lo_btns)
-        self.SortKeywords()
 
     def LoadCSV(self):
         self.keywordList.clear()
@@ -83,7 +85,7 @@ class KeywordManagerDialog(QDialog):
             csvReader = csv.reader(csvfile)
             for cat, txt, priority in csvReader:
                 self.categories.add(cat)
-                self.keywordList.append(Keyword(txt, cat, int(priority)))
+                self.keywordList.add(Keyword(txt, cat, int(priority)))
         self.SortKeywords()
 
     def OpenCSV(self):
